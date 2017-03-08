@@ -1,7 +1,7 @@
 <?php
 /**
 <p>
-Handle errors via event shutdown. 
+Handle errors via event shutdown..
 </p>
 <p>
 Features:
