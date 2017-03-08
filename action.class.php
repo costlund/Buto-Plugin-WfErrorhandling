@@ -54,9 +54,17 @@ class PluginWfErrorhandling{
   #code#
    */
   public static function event_shutdown($data){
+
+    //wfHelp::yml_dump($data, true);
+    
     $error = error_get_last();
     // Handle error if there is one.
     if($error){
+      /**
+       * Add extra params to error.
+       */
+      $error['server'] = $_SERVER;
+      $error['session'] = $_SESSION;
       // Default values.
       $default = wfFilesystem::loadYml(__DIR__.'/data/default.yml');
       // Rewrite default.
@@ -102,6 +110,12 @@ class PluginWfErrorhandling{
           // smtp is not an array...
         }
       }
+      if($default['slack']){
+        if(isset($default['slack_settings']) && isset($default['slack_settings']['webhook']) && isset($default['slack_settings']['group'])){
+          PluginWfErrorhandling::slack($default['slack_settings']['webhook'], wfHelp::getYmlDump($error, true), $default['slack_settings']['group']);
+        }
+        $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/slack/innerHTML', 'Slack message was sent!');
+      }
       if($default['alert']){
         // Render.
         if(wfUser::hasRole('webmaster')){
@@ -113,6 +127,21 @@ class PluginWfErrorhandling{
       }
       //Todo: debug_backtrace()?
     }
+  }
+  public static function slack($webhook, $message, $room = "some-group", $icon = ":red_card:"){
+    $room = ($room) ? $room : "buggar";
+    $data = "payload=" . json_encode(array(
+            "channel"       =>  "#{$room}",
+            "text"          =>  $message,
+            "icon_emoji"    =>  $icon
+        ));
+    $ch = curl_init($webhook);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    return $result;
   }
 }
 

@@ -26,4 +26,7 @@ innerHTML:
       email:
         type: p
         innerHTML: Email is not activated!
+      slack:
+        type: p
+        innerHTML: Slack is not activated!
       

@@ -1,4 +1,6 @@
 alert: true
 log: false
 email: false
+slack: false
 smtp: {}
+slack_settings: {}
