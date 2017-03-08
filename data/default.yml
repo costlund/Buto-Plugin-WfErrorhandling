@@ -1,0 +1,4 @@
+alert: true
+log: false
+email: false
+smtp: {}

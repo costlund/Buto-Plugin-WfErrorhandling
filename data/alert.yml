@@ -1,0 +1,29 @@
+type: div
+attribute:
+  class: 'alert alert-danger'
+  role: alert
+innerHTML: 
+  strong:
+    type: strong
+    innerHTML: Whoops an error occurred!
+  webmaster:
+    settings:
+      disabled: true
+    type: div
+    innerHTML:
+      message:
+        type: p
+        innerHTML:
+      file:
+        type: p
+        innerHTML:
+      line:
+        type: p
+        innerHTML:
+      log:
+        type: p
+        innerHTML: Log is not activated!
+      email:
+        type: p
+        innerHTML: Email is not activated!
+      
