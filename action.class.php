@@ -128,6 +128,7 @@ class PluginWfErrorhandling{
       //Todo: debug_backtrace()?
     }
   }
+  //<editor-fold defaultstate="collapsed" desc="Slack code">
   public static function slack($webhook, $message, $room = "some-group", $icon = ":red_card:"){
     $room = ($room) ? $room : "buggar";
     $data = "payload=" . json_encode(array(
@@ -143,6 +144,7 @@ class PluginWfErrorhandling{
     curl_close($ch);
     return $result;
   }
+  //</editor-fold>
 }
 
 
