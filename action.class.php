@@ -54,12 +54,11 @@ class PluginWfErrorhandling{
   #code#
    */
   public static function event_shutdown($data){
-
-    //wfHelp::yml_dump($data, true);
-    
     $error = error_get_last();
-    // Handle error if there is one.
-    if($error){
+    /**
+     * If error and not type deprecated.
+     */
+    if($error && $error['type'] != 8192){
       /**
        * Add extra params to error.
        */
@@ -128,7 +127,6 @@ class PluginWfErrorhandling{
       //Todo: debug_backtrace()?
     }
   }
-  //<editor-fold defaultstate="collapsed" desc="Slack code">
   public static function slack($webhook, $message, $room = "some-group", $icon = ":red_card:"){
     $room = ($room) ? $room : "buggar";
     $data = "payload=" . json_encode(array(
@@ -144,7 +142,6 @@ class PluginWfErrorhandling{
     curl_close($ch);
     return $result;
   }
-  //</editor-fold>
 }
 
 
