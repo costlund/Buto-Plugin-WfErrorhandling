@@ -63,6 +63,7 @@ class PluginWfErrorhandling{
        * Add extra params to error.
        */
       $error['server'] = $_SERVER;
+      $error['server']['HTTP_COOKIE'] = '*';
       $error['session'] = $_SESSION;
       // Default values.
       $default = wfFilesystem::loadYml(__DIR__.'/data/default.yml');
