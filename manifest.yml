@@ -1,0 +1,26 @@
+version: '1.0.1'
+history:
+  '1.0.1':
+    date: '2018-11-26'
+    description: 'Code improvement.'
+  '1.0':
+    date: '2018-11-26'
+    description: 'First version.'
+plugin:
+  -
+    name: wf/phpmailer
+    version: '1.0'
+  -
+    name: wf/array
+    version: '1.0.1'
+sys:
+  -
+    name: mercury
+    version:
+      - '1.0'
+php:
+  - '7.2'
+author: null
+links:
+  Github: 'https://github.com'
+description: ''

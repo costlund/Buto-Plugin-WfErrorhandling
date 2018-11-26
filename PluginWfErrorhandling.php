@@ -59,26 +59,21 @@ class PluginWfErrorhandling{
      * If error and not type deprecated.
      */
     if($error && $error['type'] != 8192){
-      /**
-       * Add extra params to error.
-       */
       $error['server'] = $_SERVER;
       $error['server']['HTTP_COOKIE'] = '*';
       $error['session'] = $_SESSION;
-      // Default values.
       $default = wfFilesystem::loadYml(__DIR__.'/data/default.yml');
-      // Rewrite default.
-      $default = array_merge($default, wfArray::get($data, 'data'));
-      // Element to output.
+      $default = new PluginWfArray(array_merge($default, wfArray::get($data, 'data')));
       $element = wfFilesystem::loadYml(__DIR__.'/data/alert.yml');
-      // Alert.
-      if($default['alert']){
+      if($default->get('alert')){
         $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/message/innerHTML', wfArray::get($error, 'message'));
         $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/file/innerHTML', 'File: '.wfArray::get($error, 'file'));
         $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/line/innerHTML', 'Line: '.wfArray::get($error, 'line'));
       }
-      // Log.
-      if($default['log']){
+      /**
+       * Log.
+       */
+      if($default->get('log')){
         // Log if folder /log/wf/errorhandling exist in theme directory.
         $dir = '/log/wf/errorhandling';
         if(wfFilesystem::fileExist(wfArray::get($GLOBALS, 'sys/theme_dir').$dir)){
@@ -91,16 +86,16 @@ class PluginWfErrorhandling{
           $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/log/innerHTML', "Log could not be written due to dir $dir not exist!");
         }
       }
-      // Log.
-      if($default['email']){
-        //include_once wfArray::get($GLOBALS, 'sys/app_dir').'/plugin/wf/phpmailer/action.class.php';
+      /**
+       * Email.
+       */
+      if($default->get('email')){
         wfPlugin::includeonce('wf/phpmailer');
         $wf_phpmailer = new PluginWfPhpmailer();
-        $default['smtp'] = wfSettings::getSettingsFromYmlString($default['smtp']);
-        if(is_array($default['smtp'])){
-          $default = wfArray::set($default, 'smtp/Body', wfHelp::getYmlDump($error, true));
-          $temp = $wf_phpmailer->send($default['smtp']);
-          //wfHelp::yml_dump($temp);
+        $default->set('smtp', wfSettings::getSettingsFromYmlString($default->get('smtp')));
+        if(is_array($default->get('smtp'))){
+          $default->set('smtp/Body', wfHelp::getYmlDump($error, true));
+          $temp = $wf_phpmailer->send($default->get('smtp'));
           if(wfArray::get($temp, 'success')){
             $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/email/innerHTML', "Mail was sent to: ".wfArray::get($temp, 'smtp/To').".");
           }else{
@@ -110,22 +105,27 @@ class PluginWfErrorhandling{
           // smtp is not an array...
         }
       }
-      if($default['slack']){
-        if(isset($default['slack_settings']) && isset($default['slack_settings']['webhook']) && isset($default['slack_settings']['group'])){
-          PluginWfErrorhandling::slack($default['slack_settings']['webhook'], wfHelp::getYmlDump($error, true), $default['slack_settings']['group']);
+      /**
+       * Slack.
+       */
+      if($default->get('slack')){
+        if($default->get('slack_settings/webhook') && $default->get('slack_settings/group') ){
+          PluginWfErrorhandling::slack($default->get('slack_settings/webhook'), wfHelp::getYmlDump($error, true), $default->get('slack_settings/group'));
         }
         $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/slack/innerHTML', 'Slack message was sent!');
       }
-      if($default['alert']){
-        // Render.
+      /**
+       * Alert.
+       */
+      if($default->get('alert')){
         if(wfUser::hasRole('webmaster')){
-          // If user has role webmaster we show detailed info.
+          /**
+           * Alert more if webmaster.
+           */
           $element = wfArray::set($element, 'innerHTML/webmaster/settings/disabled', false);
         }
         wfDocument::renderElement(array($element));
-        
       }
-      //Todo: debug_backtrace()?
     }
   }
   public static function slack($webhook, $message, $room = "some-group", $icon = ":red_card:"){
