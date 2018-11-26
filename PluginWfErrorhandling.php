@@ -54,6 +54,11 @@ class PluginWfErrorhandling{
   #code#
    */
   public static function event_shutdown($data){
+    wfPlugin::includeonce('wf/array');
+    $data = new PluginWfArray($data);
+    /**
+     * Get error.
+     */
     $error = error_get_last();
     /**
      * If error and not type deprecated.
@@ -63,7 +68,7 @@ class PluginWfErrorhandling{
       $error['server']['HTTP_COOKIE'] = '*';
       $error['session'] = $_SESSION;
       $default = wfFilesystem::loadYml(__DIR__.'/data/default.yml');
-      $default = new PluginWfArray(array_merge($default, wfArray::get($data, 'data')));
+      $default = new PluginWfArray(array_merge($default, $data->get('data')));
       $element = wfFilesystem::loadYml(__DIR__.'/data/alert.yml');
       if($default->get('alert')){
         $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/message/innerHTML', wfArray::get($error, 'message'));
@@ -108,7 +113,11 @@ class PluginWfErrorhandling{
       /**
        * Slack.
        */
-      if($default->get('slack')){
+      $slack_filter = true;
+      if($data->get('data/slack_settings/domain_filter') && !strstr(wfServer::getServerName(), $data->get('data/slack_settings/domain_filter'))){
+        $slack_filter = false;
+      }
+      if($default->get('slack') && $slack_filter){
         if($default->get('slack_settings/webhook') && $default->get('slack_settings/group') ){
           PluginWfErrorhandling::slack($default->get('slack_settings/webhook'), wfHelp::getYmlDump($error, true), $default->get('slack_settings/group'));
         }
