@@ -1,58 +1,5 @@
 <?php
-/**
-<p>
-Handle errors via event shutdown. 
-</p>
-<p>
-Features:
-</p>
-<ul>
-<li>Alert in browser.
-<li>Log to file.
-<li>Email.
-</ul>
-<p>
-Param error_reporting in application settings.yml must have value 0 when using this plugin.
-</p>
-#code-yml#
-error_reporting: 0
-#code#
- */
 class PluginWfErrorhandling{
-  /**
-  <p>
-  Default values:
-  </p>
-  #code-yml#
-  #load:[app_dir]/plugin/[plugin]/data/default.yml:load#
-  #code#
-  <p>
-  Registrate shutdown event in theme settings.yml.
-  </p>
-  <p>
-  Set alert to true to output element with error info. 
-  Set log to true if put error to file /log/wf/errorhandling/YYDDMM.log.yml. The folder must exist. 
-  Set email to true along with proper settings for smtp to send email.
-  </p>
-  <p>
-  If user has role "webmaster" error details will be output also.
-  </p>
-  <p>
-  Example of usage:
-  </p>
-  #code-yml#
-  events:
-    shutdown:
-      wf_error:
-        plugin: 'wf/errorhandling'
-        method: 'shutdown'
-        data:
-          alert: true
-          log: true
-          email: true
-          smtp: 'yml:/theme/[theme]/data/phpmailer.yml:wf_phpmailer_gmail'
-  #code#
-   */
   public static function event_shutdown($data){
     wfPlugin::includeonce('wf/array');
     $data = new PluginWfArray($data);
@@ -119,7 +66,12 @@ class PluginWfErrorhandling{
       }
       if($default->get('slack') && $slack_filter){
         if($default->get('slack_settings/webhook') && $default->get('slack_settings/group') ){
-          PluginWfErrorhandling::slack($default->get('slack_settings/webhook'), wfHelp::getYmlDump($error, true), $default->get('slack_settings/group'));
+          wfPlugin::includeonce('slack/webhook_v1');
+          $slack_webhook = new PluginSlackWebhook_v1();
+          $slack_webhook->url = $default->get('slack_settings/webhook');
+          $slack_webhook->channel = $default->get('slack_settings/group');
+          $slack_webhook->text = wfHelp::getYmlDump($error, true);
+          $slack_webhook->send();
         }
         $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/slack/innerHTML', 'Slack message was sent!');
       }
@@ -137,42 +89,4 @@ class PluginWfErrorhandling{
       }
     }
   }
-  public static function slack($webhook, $message, $room = "some-group", $icon = ":red_card:"){
-    $room = ($room) ? $room : "buggar";
-    $data = "payload=" . json_encode(array(
-            "channel"       =>  "#{$room}",
-            "text"          =>  $message,
-            "icon_emoji"    =>  $icon
-        ));
-    $ch = curl_init($webhook);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $result = curl_exec($ch);
-    curl_close($ch);
-    return $result;
-  }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
