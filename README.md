@@ -1,6 +1,6 @@
 # Buto-Plugin-WfErrorhandling
-Buto plugin to handle errors.
 
+Handle errors.
 
 <p>
 Handle errors via event shutdown. 
@@ -15,14 +15,7 @@ Features:
 <li>Slack.
 </ul>
 
-<p>
-Param error_reporting in application settings.yml must have value 0 when using this plugin.
-</p>
-
-
-<p>
-Add in theme settings yml.
-</p>
+## Settings
 
 ````
 events:
@@ -38,7 +31,11 @@ events:
         slack_settings:
           webhook: 'url to slack hook'
           group: _group_
-          domain_filter: _optional_filter_to_restrict_by_domain_
+          domain_filter: localh
 ````
+
+### Domain filter
+
+If value is localh only domains having this text (like localhost) will send a Slack message.
 
 
