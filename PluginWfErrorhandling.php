@@ -11,9 +11,24 @@ class PluginWfErrorhandling{
      * If error and not type deprecated.
      */
     if($error && $error['type'] != 8192){
-      $error['server'] = $_SERVER;
-      $error['server']['HTTP_COOKIE'] = '*';
+      /**
+       * Server
+       * Clean up from $_SERVER.
+       */
+      $server = new PluginWfArray($_SERVER);
+      $server_alert = new PluginWfArray();
+      $server_variables = array('HTTP_HOST', 'HTTP_USER_AGENT', 'HTTP_REFERER', 'SERVER_NAME', 'SERVER_ADDR', 'DOCUMENT_ROOT', 'REDIRECT_QUERY_STRING', 'REDIRECT_URL', 'REQUEST_METHOD', 'QUERY_STRING', 'REQUEST_URI');
+      foreach($server_variables as $v){
+        $server_alert->set($v, $server->get($v));
+      }
+      $error['server'] = $server_alert->get();
+      /**
+       * Session
+       */
       $error['session'] = $_SESSION;
+      /**
+       * 
+       */
       $default = wfFilesystem::loadYml(__DIR__.'/data/default.yml');
       $default = new PluginWfArray(array_merge($default, $data->get('data')));
       $element = wfFilesystem::loadYml(__DIR__.'/data/alert.yml');

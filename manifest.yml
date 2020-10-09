@@ -1,13 +1,20 @@
-version: '1.1'
+version: 1.1.1
 history:
-  '1.1':
+  1.1.1:
+    date: '2020-10-09'
+    title: 'Server variables'
+    description: 'Clean up server variables to avoid sending unnecessary values.'
+  1.1.0:
     date: '2019-09-10'
-    description: Add plugin slack/webhook_v1 to send messages to Slack.
-  '1.0.1':
+    title: 'Slack'
+    description: 'Add plugin slack/webhook_v1 to send messages to Slack.'
+  1.0.1:
     date: '2018-11-26'
+    title: 'Improvement'
     description: 'Code improvement.'
-  '1.0':
+  1.0.0:
     date: '2018-11-26'
+    title: 'First version'
     description: 'First version.'
 plugin:
   -
@@ -15,7 +22,7 @@ plugin:
     version: '1.0'
   -
     name: wf/array
-    version: '1.0.1'
+    version: 1.2.0
   -
     name: slack/webhook_v1
     version: '1.0'
