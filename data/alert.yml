@@ -4,7 +4,7 @@ attribute:
   role: alert
 innerHTML: 
   strong:
-    type: strong
+    type: h1
     innerHTML: Whoops an error occurred!
   webmaster:
     settings:
@@ -12,7 +12,7 @@ innerHTML:
     type: div
     innerHTML:
       message:
-        type: p
+        type: pre
         innerHTML:
       file:
         type: p
