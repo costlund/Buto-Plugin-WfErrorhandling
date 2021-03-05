@@ -2,7 +2,7 @@ version: 1.1.2
 history:
   1.1.2:
     date: '2020-11-17'
-    title: 'Layout'
+    title: Layout
     description: 'Replace tag P with PRE for error message and made headline H1.'
   1.1.1:
     date: '2020-10-09'
@@ -10,11 +10,11 @@ history:
     description: 'Clean up server variables to avoid sending unnecessary values.'
   1.1.0:
     date: '2019-09-10'
-    title: 'Slack'
+    title: Slack
     description: 'Add plugin slack/webhook_v1 to send messages to Slack.'
   1.0.1:
     date: '2018-11-26'
-    title: 'Improvement'
+    title: Improvement
     description: 'Code improvement.'
   1.0.0:
     date: '2018-11-26'
@@ -23,13 +23,13 @@ history:
 plugin:
   -
     name: wf/phpmailer
-    version: '1.0'
+    version: 1.2.0
   -
     name: wf/array
     version: 1.2.0
   -
     name: slack/webhook_v1
-    version: '1.0'
+    version: 1.0.1
 sys:
   -
     name: mercury
