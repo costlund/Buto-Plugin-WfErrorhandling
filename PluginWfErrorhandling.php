@@ -91,6 +91,26 @@ class PluginWfErrorhandling{
         $element = wfArray::set($element, 'innerHTML/webmaster/innerHTML/slack/innerHTML', 'Slack message was sent!');
       }
       /**
+       * method
+       */
+      if($default->get('method')){
+        $post = new PluginWfArray();
+        $post->set('error_message', wfArray::get($error, 'message'));
+        $post->set('error_file', wfArray::get($error, 'file'));
+        $post->set('error_line', wfArray::get($error, 'line'));
+        $post->set('error_type', wfArray::get($error, 'type'));
+        foreach($server_variables as $v){
+          $post->set($v, $server->get($v));
+        }
+        $post->set('session_id', session_id());
+        $post->set('session', wfHelp::getYmlDump($_SESSION, true));
+        wfPlugin::includeonce($default->get('method/plugin'));
+        $plugin = $default->get('method/plugin');
+        $obj = wfSettings::getPluginObj($plugin);
+        $obj_method = $default->get('method/name');
+        $obj->$obj_method($default->get('method'), $post->get());
+      }
+      /**
        * Alert.
        */
       if($default->get('alert')){

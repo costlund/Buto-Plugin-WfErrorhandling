@@ -1,5 +1,9 @@
-version: 1.1.2
+version: 1.2.0
 history:
+  1.2.0:
+    date: '2021-10-15'
+    title: Method
+    description: 'One could call a method to push error data to.'
   1.1.2:
     date: '2020-11-17'
     title: Layout
@@ -21,6 +25,9 @@ history:
     title: 'First version'
     description: 'First version.'
 plugin:
+  -
+    name: error/push
+    version: 1.0.0
   -
     name: wf/phpmailer
     version: 1.2.0
