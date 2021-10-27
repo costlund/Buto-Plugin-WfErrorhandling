@@ -104,6 +104,7 @@ class PluginWfErrorhandling{
         }
         $post->set('session_id', session_id());
         $post->set('session', wfHelp::getYmlDump($_SESSION, true));
+        $post->set('phpversion', phpversion());
         wfPlugin::includeonce($default->get('method/plugin'));
         $plugin = $default->get('method/plugin');
         $obj = wfSettings::getPluginObj($plugin);
