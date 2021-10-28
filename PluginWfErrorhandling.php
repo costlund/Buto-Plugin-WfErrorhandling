@@ -8,7 +8,7 @@ class PluginWfErrorhandling{
      */
     $error = error_get_last();
     /**
-     * If error and not type deprecated.
+     * If error.
      */
     if($error){
       /**
