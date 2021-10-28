@@ -10,7 +10,7 @@ class PluginWfErrorhandling{
     /**
      * If error and not type deprecated.
      */
-    if($error && $error['type'] != 8192){
+    if($error){
       /**
        * Server
        * Clean up from $_SERVER.
