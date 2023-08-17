@@ -76,7 +76,7 @@ class PluginWfErrorhandling{
        * Slack.
        */
       $slack_filter = true;
-      if($data->get('data/slack_settings/domain_filter') && !strstr(wfServer::getServerName(), $data->get('data/slack_settings/domain_filter'))){
+      if($data->get('data/slack_settings/domain_filter') && !wfPhpfunc::strstr(wfServer::getServerName(), $data->get('data/slack_settings/domain_filter'))){
         $slack_filter = false;
       }
       if($default->get('slack') && $slack_filter){
