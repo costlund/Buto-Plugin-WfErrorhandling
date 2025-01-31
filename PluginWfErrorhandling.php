@@ -12,12 +12,16 @@ class PluginWfErrorhandling{
      */
     if($error){
       /**
+       * Globals
+       */
+      $error['globals']['theme'] = wfGlobals::get('theme');
+      /**
        * Server
        * Clean up from $_SERVER.
        */
       $server = new PluginWfArray($_SERVER);
       $server_alert = new PluginWfArray();
-      $server_variables = array('HTTP_HOST', 'HTTP_USER_AGENT', 'HTTP_REFERER', 'SERVER_NAME', 'SERVER_ADDR', 'DOCUMENT_ROOT', 'REDIRECT_QUERY_STRING', 'REDIRECT_URL', 'REQUEST_METHOD', 'QUERY_STRING', 'REQUEST_URI');
+      $server_variables = array('REMOTE_ADDR', 'HTTP_HOST', 'HTTP_USER_AGENT', 'HTTP_REFERER', 'SERVER_NAME', 'SERVER_ADDR', 'DOCUMENT_ROOT', 'REDIRECT_QUERY_STRING', 'REDIRECT_URL', 'REQUEST_METHOD', 'QUERY_STRING', 'REQUEST_URI');
       foreach($server_variables as $v){
         $server_alert->set($v, $server->get($v));
       }

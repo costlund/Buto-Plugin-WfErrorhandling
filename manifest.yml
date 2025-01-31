@@ -1,5 +1,9 @@
-version: 1.4.1
+version: 1.4.2
 history:
+  1.4.2:
+    date: '2024-01-31'
+    title: Theme, Ip
+    description: 'Add globals/theme, server/REMOTE_ADDR.'
   1.4.1:
     date: '2023-09-11'
     title: Versions
